@@ -29,8 +29,8 @@ const db = require('./dbSequelize/index');
 (async () => {
 	try {
 		await db.sequelize.authenticate();
-		// await db.sequelize.sync();
-		await db.sequelize.sync({ alter: true }); // for development to update table columns
+		await db.sequelize.sync();
+		// await db.sequelize.sync({ alter: true }); // for development to update table columns
 		console.log('Database connected & synced successfully.');
 	} catch (error) {
 		console.error('Error db connection:', error);

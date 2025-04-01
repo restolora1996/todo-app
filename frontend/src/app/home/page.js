@@ -5,8 +5,6 @@ import Wrapper from '@/components/Wrapper';
 
 import NewTask from '@/components/NewTask';
 import Todo from '@/components/Todo';
-import EditTask from '@/components/EditTask';
-import ViewTask from '@/components/ViewTask';
 
 export default function Home() {
 	const [page, setPage] = useState('Home');
@@ -19,12 +17,6 @@ export default function Home() {
 
 			{/* New Task page */}
 			{page === 'NewTask' && <NewTask onChangePage={onChangePage} />}
-
-			{/* Edit Task page */}
-			{/* {page === 'EditTask' && <EditTask onChangePage={onChangePage} />} */}
-
-			{/* View Task page */}
-			{/* {page === 'ViewTask' && <ViewTask onChangePage={onChangePage} />} */}
 		</Wrapper>
 	);
 }

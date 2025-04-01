@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
@@ -27,7 +27,7 @@ const Login = () => {
 			} else {
 				signIn(response);
 				showAlert('Login success.');
-				router.push('/home');
+				window.location = '/home';
 			}
 		} catch (error) {
 			console.log(error);

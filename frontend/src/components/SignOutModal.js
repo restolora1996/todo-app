@@ -21,6 +21,7 @@ export default function SignOutModal({ modal, setModal }) {
 			if (response?.logout) {
 				showAlert('Signout success. redirecting to login page.');
 				router.push('/login');
+				sessionStorage.clear();
 			}
 		} catch (error) {
 			console.log(error);
@@ -54,7 +55,6 @@ export default function SignOutModal({ modal, setModal }) {
 					</Button>
 				</DialogActions>
 			</Dialog>
-			{/* <AlertMessage open={alert.open} message={alert.message} /> */}
 		</React.Fragment>
 	);
 }

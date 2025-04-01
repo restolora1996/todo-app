@@ -20,14 +20,16 @@ const Signup = () => {
 	const [success, setSuccess] = useState(false);
 	const [isUsernameExist, setisUsernameExist] = useState('');
 	const { showAlert } = useAlert();
+
 	// Define validation schema
 	const schema = yup.object({
 		username: yup
 			.string()
 			.min(3, 'Username must be 3 characters long')
 			.required('Username is required')
-			.test('username-exist', 'Username is already exist', () => {
-				return success || !!isUsernameExist;
+			.test('username-exist', 'Username is already exist', value => {
+				console.log(value, !isUsernameExist, { success });
+				return success ? true : !isUsernameExist || true;
 			}),
 		password: yup
 			.string()
@@ -97,7 +99,8 @@ const Signup = () => {
 						alert(response?.error?.message || response?.data?.error?.message);
 					} else {
 						// Use functional update to ensure state is updated correctly
-						setisUsernameExist(response?.data?.exist ? 'Username is already exist' : '');
+						console.log(response.data);
+						setisUsernameExist(response?.data?.exist);
 					}
 				} catch (error) {
 					console.log({ error });
@@ -111,7 +114,6 @@ const Signup = () => {
 		if (!success && username && username.length >= 3) {
 			// usernameExist.cancel(); // throw debounced function
 			usernameExist(username);
-			console.log({ isUsernameExist, state: !!isUsernameExist });
 		}
 	}, [password, username, success, isUsernameExist, usernameExist]);
 
@@ -130,8 +132,8 @@ const Signup = () => {
 					variant="outlined"
 					margin="normal"
 					{...register('username')}
-					error={!!isUsernameExist || !!errors?.username}
-					helperText={isUsernameExist || errors?.username?.message}
+					error={isUsernameExist || !!errors?.username}
+					helperText={isUsernameExist ? 'Username is already exist' : errors?.username?.message}
 				/>
 				<TextField
 					fullWidth

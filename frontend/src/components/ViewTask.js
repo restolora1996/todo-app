@@ -18,13 +18,14 @@ import Link from 'next/link';
 
 const API_URL = process.env.UPLOAD_PATH || 'http://localhost:5000';
 
-const ViewTask = ({ data, loading }) => {
+const ViewTask = ({ data }) => {
 	const router = useRouter();
-	const { token } = useAuth();
+	const {
+		state: { token }
+	} = useAuth();
 	const { setLoading } = useFetchData();
 	const { showAlert } = useAlert();
 	const [modal, setModal] = useState(false);
-	console.log(data);
 
 	const openModal = () => {
 		setModal(true);
@@ -34,11 +35,11 @@ const ViewTask = ({ data, loading }) => {
 		setModal(false);
 	};
 
-	const onDeleteTask = async () => {
+	const onDeleteTask = () => {
 		try {
-			await deleteTask({ id: data.id }, token);
-			router.push('/home');
+			deleteTask({ id: data.id }, token);
 			setLoading(true);
+			window.location = '/home';
 			showAlert('Successfully deleted.');
 			onClose();
 		} catch (error) {
@@ -61,7 +62,7 @@ const ViewTask = ({ data, loading }) => {
 								<Grid size={{ xs: 12, sm: 10, md: 6 }}>
 									<Box className="flex justify-start items-center gap-4">
 										<Image
-											src={`/myassets/icons/${data.priority}_table.svg`}
+											src={`/myassets/Icons/${data.priority}_table.svg`}
 											width={50}
 											height={50}
 											alt={'High'}
@@ -72,7 +73,7 @@ const ViewTask = ({ data, loading }) => {
 												<Grid item sm={12} md="auto">
 													<Box className="flex gap-2 items-center">
 														<Image
-															src={`/myassets/icons/${data?.status}.svg`}
+															src={`/myassets/Icons/${data?.status}.svg`}
 															width={15}
 															height={15}
 															alt={data?.status}
@@ -170,7 +171,7 @@ const ViewTask = ({ data, loading }) => {
 												</Typography>
 												<Box className="flex items-center gap-2" sx={{ color: styles.secondary }}>
 													<Image
-														src={`/myassets/icons/${subtask.status}.svg`}
+														src={`/myassets/Icons/${subtask.status}.svg`}
 														width={10}
 														height={10}
 														alt={subtask?.status}

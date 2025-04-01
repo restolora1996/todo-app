@@ -19,7 +19,9 @@ import { styles } from '@/utils';
 
 const EditTask = ({ data: form, setLoading }) => {
 	const router = useRouter();
-	const { userData, token } = useAuth();
+	const {
+		state: { user, token }
+	} = useAuth();
 	const { showAlert } = useAlert();
 	const [markComplete, setMarkComplete] = useState(false);
 	const [subTaskAreDone, setSubTasksAreDone] = useState(false);
@@ -44,7 +46,6 @@ const EditTask = ({ data: form, setLoading }) => {
 			.array()
 			.max(5, 'Maximum of 5 uploaded files are allowed')
 			.test('fileType', 'Only PNG and JPG files are allowed', files => {
-				console.log(files.map(file => file.type));
 				return files.length
 					? files.every(file =>
 							file?.type
@@ -81,7 +82,7 @@ const EditTask = ({ data: form, setLoading }) => {
 	const subtasks = watch('subtasks');
 	const status = watch('status');
 	const attachments = watch('attachments');
-	console.log(attachments);
+
 	// update completionDate if status is
 	useEffect(() => {
 		if (status === 'Completed') {
@@ -119,7 +120,7 @@ const EditTask = ({ data: form, setLoading }) => {
 				data.completionDate = moment(data.completionDate).format('YYYY-MM-DD HH:MM:SS');
 			}
 
-			const response = await updateTask({ ...data, user_id: userData?.user?.id }, token);
+			const response = await updateTask({ ...data, user_id: user?.id }, token);
 			if (response?.error || response?.data?.error) {
 				const message = response?.error?.message || response?.error?.data?.error?.message;
 				showAlert(message);

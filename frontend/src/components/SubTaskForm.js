@@ -5,13 +5,6 @@ import { Controller } from 'react-hook-form';
 import { useAlert } from '@/context/AlertContext';
 
 const SubTaskForm = ({ control, subtasks, setValue, errors, status, openModal }) => {
-	// const onDeleteSubTask = useCallback(
-	// 	data => {
-	// 		const filterSubTask = subtasks.filter((_, index) => index !== data);
-	// 		setValue('subtasks', filterSubTask);
-	// 	},
-	// 	[setValue, subtasks]
-	// );
 	const { showAlert } = useAlert();
 
 	const addNewtask = () => {
@@ -25,7 +18,6 @@ const SubTaskForm = ({ control, subtasks, setValue, errors, status, openModal })
 	const onChangeStatus = useCallback(
 		(value, index) => {
 			const updatedSubTask = subtasks.map((subtask, i) => (i === index ? { ...subtask, status: value } : subtask));
-			// setSubTasks(updatedSubTask);
 			setValue('subtasks', updatedSubTask);
 		},
 		[setValue, subtasks]

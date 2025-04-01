@@ -22,11 +22,11 @@ export default function SocialMedias() {
 				</Typography>
 			</Divider>
 			<Button fullWidth variant="outlined" sx={socialButtons}>
-				<Image src="/myassets/icons/Google.svg" alt="google" width={25} height={15} />
+				<Image src="/myassets/Icons/Google.svg" alt="google" width={25} height={15} />
 				<span className="ml-2">Continue with Google</span>
 			</Button>
 			<Button fullWidth variant="outlined" sx={socialButtons}>
-				<Image src="/myassets/icons/Facebook.svg" alt="facebook" width={25} height={15} />
+				<Image src="/myassets/Icons/Facebook.svg" alt="facebook" width={25} height={15} />
 				<span className="ml-2">Continue with Facebook</span>
 			</Button>
 		</>

@@ -30,7 +30,6 @@ import SubTaskForm from './SubTaskForm';
 import { priorities, statusList, tenMB, validImageType } from '@/utils/constants';
 
 const NewTask = ({ onChangePage }) => {
-	// const { userData, token } = useAuth();
 	const {
 		state: { user, token }
 	} = useAuth();

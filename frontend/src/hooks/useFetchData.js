@@ -5,8 +5,9 @@ import { getTask, getTaskById } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 
 const useFetchData = (id = null) => {
-	const [mounted, setMounted] = useState(false);
-	const { token } = useAuth();
+	const {
+		state: { token }
+	} = useAuth();
 	const { showAlert } = useAlert();
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -42,9 +43,6 @@ const useFetchData = (id = null) => {
 	}, [id, showAlert, token]);
 
 	useEffect(() => {
-		// Prevents double fetching
-		// if (!isFetched.current && token) fetchData();
-		// isFetched.current = true;
 		if (!token) return;
 
 		if (!id) {
@@ -52,9 +50,7 @@ const useFetchData = (id = null) => {
 		} else {
 			fetchById();
 		}
-
-		setMounted(true);
-	}, [fetchById, fetchData, id, mounted, token]);
+	}, [fetchById, fetchData, id, token]);
 
 	return { data, setData, error, loading, setLoading };
 };

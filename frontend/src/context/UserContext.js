@@ -10,30 +10,22 @@ export const UserProvider = ({ children }) => {
 	const initialState = { user: null, token: null, loading: true, form: null };
 
 	const [state, setState] = useState(initialState);
-	const [userData, setUser] = useState(null);
-	const [token, setToken] = useState(null);
-	const [loading, setLoading] = useState(true);
-	// edit data
-	const [form, setForm] = useState(null);
+
 	const setFormData = data => {
 		setState(prevState => ({ ...prevState, form: data }));
-		setForm(data);
 	};
 
 	const resetFormData = () => {
 		setState(prevState => ({ ...prevState, form: null }));
-		setForm(null);
 	};
 
 	const signIn = async data => {
 		setState(prevState => ({ ...prevState, user: data?.user }));
-		setUser(data.user);
 		await fetchToken();
 	};
+
 	const signOut = () => {
 		setState(prevState => ({ ...prevState, user: null, token: null }));
-		setUser(null);
-		setToken(null);
 	};
 
 	// Fetch token from API route
@@ -42,11 +34,9 @@ export const UserProvider = ({ children }) => {
 			const response = await fetch('/api/auth/getToken', { credentials: 'include' });
 			if (!response.ok) throw new Error('No token found');
 			const data = await response.json();
-			setToken(data?.token);
+
 			setState(prevState => ({ ...prevState, token: data?.token }));
 		} catch (error) {
-			setLoading(false);
-			setToken(null);
 			setState(prevState => ({ ...prevState, token: null, loading: false }));
 		}
 	}, []);
@@ -57,16 +47,16 @@ export const UserProvider = ({ children }) => {
 				const response = await verifyToken(token);
 				// throw error invalid
 				if (!response?.user) throw new Error('Invalid token');
-				setUser(response);
-				setLoading(false);
-				setState(prevState => ({ ...prevState, user: response.user, loading: false }));
+
+				setState(prevState => ({ ...prevState, user: response.user, token, loading: false }));
 			}
 		} catch (error) {
 			console.log('verify', error);
 			setState(prevState => ({ ...prevState, user: null, loading: false }));
+
 			if (error?.response.data?.error?.expired) {
 				window.location = '/login';
-				alert('Your session has expired. Please sign in again.', 'error');
+				alert('Your session has expired. Please sign in again.');
 			}
 			console.log('Token verification failed:', error.message);
 		}
@@ -77,32 +67,18 @@ export const UserProvider = ({ children }) => {
 	}, [fetchToken]);
 
 	useEffect(() => {
-		if (token) verify(token);
-	}, [token, verify]);
+		const token = state.token;
 
-	console.log('state', state);
+		if (token) verify(token);
+	}, [state.token, verify]);
+
 	return (
-		<UserContext.Provider
-			value={{ state, loading, userData, token, signIn, signOut, form, setFormData, resetFormData, verify }}>
-			{loading ? (
-				<div className="w-[100vw] h-[100vh] flex items-center jusify-center">
-					<Loader />
-				</div>
-			) : (
-				children
-			)}
+		<UserContext.Provider value={{ state, setState, signIn, signOut, setFormData, resetFormData, verify }}>
+			{state.loading ? <Loader /> : children}
 		</UserContext.Provider>
 	);
 };
 
 export const useAuth = () => {
 	return useContext(UserContext);
-};
-
-export const useVerifyToken = () => {
-	const { token, verify } = useContext(UserContext);
-
-	useEffect(() => {
-		if (token) verify(token);
-	}, [token, verify]);
 };

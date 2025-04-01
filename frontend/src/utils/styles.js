@@ -138,5 +138,15 @@ export const customStyle = {
 	fontBlack: {
 		color: '#000',
 		fontSize: '16px'
+	},
+	selectedTaskCount: {
+		position: 'absolute',
+		left: '32px',
+		top: '10px',
+		color: styles.white,
+		background: styles.mainButtons,
+		padding: '2px 7px',
+		borderRadius: '10px',
+		fontSize: '12px'
 	}
 };

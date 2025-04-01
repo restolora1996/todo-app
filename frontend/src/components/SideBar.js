@@ -22,7 +22,9 @@ import SignOutModal from './SignOutModal';
 
 export default function Sidebar() {
 	const router = useRouter();
-	const { userData } = useAuth();
+	const {
+		state: { user }
+	} = useAuth();
 	const [modal, setModal] = useState(false);
 
 	const menuItems = [
@@ -117,13 +119,13 @@ export default function Sidebar() {
 						<Image src="/myassets/Logo Header.svg" width={100} height={60} alt="Logo" style={{ objectFit: 'fill' }} />
 					</Link>
 				</Box>
-				{userData?.user && (
+				{user && (
 					<>
 						<Divider />
 						<Box className="flex flex-col items-center center" sx={{ gap: 0.5, width: '100%' }}>
-							<Avatar variant="outlined" size="sm" alt={userData?.user?.username} src="/broken-image.jpg" />
+							<Avatar variant="outlined" size="sm" alt={user?.username} src="/broken-image.jpg" />
 							<Box sx={{ minWidth: 0 }}>
-								<Typography level="title-sm">{userData?.user?.username}</Typography>
+								<Typography level="title-sm">{user?.username}</Typography>
 							</Box>
 						</Box>
 					</>

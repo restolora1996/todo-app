@@ -1,8 +1,8 @@
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { styles } from '@/utils';
+import { useRouter } from 'next/navigation';
 
 export const pageTitles = {
 	Home: 'To-do',
@@ -13,6 +13,7 @@ export const pageTitles = {
 
 const HeaderContent = ({ page, onChangePage }) => {
 	const disabled = ['Home', 'NewTask'].includes(page);
+	const router = useRouter();
 
 	return (
 		<Box className="flex items-center gap-1">
@@ -22,10 +23,11 @@ const HeaderContent = ({ page, onChangePage }) => {
 						<IconButton
 							onClick={() => {
 								if (page === 'Home') onChangePage('Home');
+								router.back({ shallow: true });
 							}}
 							color="primary"
 							className="flex items-center"
-							href="/home"
+							// href="/home"
 							aria-label="Home">
 							<ArrowBackIosNewIcon sx={{ fontSize: '12px' }} />
 							<Typography sx={{ fontSize: '20px', fontWeight: 500, marginLeft: '2px' }}>Back</Typography>
