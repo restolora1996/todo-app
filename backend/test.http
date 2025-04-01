@@ -1,0 +1,61 @@
+### get
+GET http://localhost:5000/api/users/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInVzZXJuYW1lIjoiYW1mMG8xIiwiaWF0IjoxNzQyMDQ2OTM1LCJleHAiOjE3NDIwNTA1MzV9.ySHWVKylm88o94ZPMxgBYZR_yr6XkeMPMgXMLeMjYbQ
+
+
+### post verify token
+POST http://localhost:5000/api/auth/verifyToken/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInVzZXJuYW1lIjoiYW1mMG8xIiwiaWF0IjoxNzQyMDQ2OTM1LCJleHAiOjE3NDIwNTA1MzV9.ySHWVKylm88o94ZPMxgBYZR_yr6XkeMPMgXMLeMjYbQ
+
+{}
+
+### get
+GET http://localhost:4000/api/users/5
+Content-Type: application/json
+
+### create
+POST http://localhost:4000/users/register
+Content-Type: application/json
+
+{
+    "username": "amf0o9",
+    "password": "amf0o9"
+    
+}
+
+### create
+POST http://localhost:5000/create/users
+Content-Type: application/json
+
+{
+    "firstname": "asd",
+    "middlename": "test",
+    "lastname": "test",
+    "address": "test",
+    "username": "test",
+    "password": "test"
+    
+}
+
+### update
+PUT http://localhost:4000/users/update/6
+Content-Type: application/json
+
+{
+    "firstname": "test222",
+    "middlename": "test222",
+    "lastname": "test222",
+    "address": "test222",
+    "username": "test222",
+    "password": "test222"
+    
+}
+
+
+### get
+GET http://localhost:4000/users/
+Content-Type: application/json
+
+{}
