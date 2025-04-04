@@ -22,12 +22,14 @@ const HeaderContent = ({ page, onChangePage }) => {
 					<Box>
 						<IconButton
 							onClick={() => {
-								if (page === 'Home') onChangePage('Home');
-								router.back({ shallow: true });
+								if (page === 'NewTask') {
+									onChangePage('Home');
+								} else {
+									router.back({ shallow: true });
+								}
 							}}
 							color="primary"
 							className="flex items-center"
-							// href="/home"
 							aria-label="Home">
 							<ArrowBackIosNewIcon sx={{ fontSize: '12px' }} />
 							<Typography sx={{ fontSize: '20px', fontWeight: 500, marginLeft: '2px' }}>Back</Typography>

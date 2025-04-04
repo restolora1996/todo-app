@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -155,14 +155,18 @@ export default function TableData({ data, setData, filter }) {
 			if (difference >= -48 && difference <= 0 && row.priority === 'Critical') {
 				dueDateState = {
 					color: styles.critical,
-					value: difference === -24 || difference === 0 ? 'Today' : 'Critical item'
+					value: difference === 0 ? 'Today' : ''
 				}; //48hrs b4 due critical
 			} else if (difference === -24 || difference === 0) {
-				dueDateState = { color: styles.mainButtons, value: 'Today' }; //24hrs b4 due today
+				dueDateState = { color: styles.mainButtons, value: difference === 0 ? 'Today' : '' }; //24hrs b4 due today
 			} else if (difference > 0) {
 				dueDateState = { color: styles.critical, value: 'Overdue' }; //overdue
 			}
 		}
+		const viewTask = url => {
+			router.push(url, undefined, { shallow: true });
+		};
+
 		return (
 			<>
 				<TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -186,17 +190,19 @@ export default function TableData({ data, setData, filter }) {
 									{rowOpen ? <ArrowDropDown fontSize="10px" /> : <ArrowRight fontSize="10px" />}
 								</IconButton>
 							)}
-							<Link href={`task/view/${row.id}`} sx={{ position: 'relative', left: '10px' }}>
-								<Typography
-									sx={{
-										fontSize: '14px',
-										fontWeight: 'bold',
-										textDecoration: 'underline',
-										...(!row?.subtasks?.length && { position: 'relative', left: '27px' })
-									}}>
-									{row.title}
-								</Typography>
-							</Link>
+							{/* <Link href={`task/view/${row.id}`} sx={{ position: 'relative', left: '10px' }}> */}
+							<Typography
+								sx={{
+									fontSize: '14px',
+									fontWeight: 'bold',
+									textDecoration: 'underline',
+									cursor: 'pointer',
+									...(!row?.subtasks?.length && { position: 'relative', left: '27px' })
+								}}
+								onClick={() => viewTask(`task/view/${row.id}`)}>
+								{row.title}
+							</Typography>
+							{/* </Link> */}
 						</Box>
 					</TableCell>
 					<TableCell align="left">

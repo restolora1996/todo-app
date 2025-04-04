@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
@@ -11,10 +11,15 @@ import { useAuth } from '@/context/UserContext';
 import { useAlert } from '@/context/AlertContext';
 
 const Login = () => {
-	const { signIn } = useAuth();
+	const router = useRouter();
+
+	const {
+		state: { token },
+		signIn
+	} = useAuth();
+
 	const { showAlert } = useAlert();
 
-	const router = useRouter();
 	const { register, handleSubmit } = useForm();
 
 	const onSubmit = async submittedData => {
@@ -27,13 +32,17 @@ const Login = () => {
 			} else {
 				signIn(response);
 				showAlert('Login success.');
-				window.location = '/home';
+				router.push('/home');
 			}
 		} catch (error) {
 			console.log(error);
 			showAlert('Something went wrong! Please try again later.', 'error');
 		}
 	};
+
+	useEffect(() => {
+		if (token) router.replace('/home');
+	}, [router, token]);
 
 	return (
 		<LoginLayout>

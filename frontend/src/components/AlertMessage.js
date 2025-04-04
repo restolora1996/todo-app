@@ -8,7 +8,8 @@ const AlertMessage = ({ open, message, duration = 1500, onClose, severity = 'suc
 			anchorOrigin={{ vertical: 'top', horizontal: position }}
 			onClose={onClose}
 			open={open}
-			autoHideDuration={duration}>
+			autoHideDuration={duration}
+			sx={{ zIndex: 11000 }}>
 			{open && (
 				<Alert onClose={onClose} severity={severity}>
 					{message}

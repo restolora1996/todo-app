@@ -37,6 +37,7 @@ const EditTask = ({ data: form, setLoading }) => {
 			.string()
 			.required('Must not be empty.')
 			.test('later-dateCreated', 'Must be later than Date Created', value => {
+				console.log(value);
 				return moment(form?.dateCreated).format('YYYY-MM-DD') < moment(value).format('YYYY-MM-DD');
 			}),
 		status: yup.string().optional(),
@@ -113,7 +114,7 @@ const EditTask = ({ data: form, setLoading }) => {
 
 	const onSubmit = async data => {
 		try {
-			setLoading(true);
+			// setLoading(true);
 			if (data.status !== 'Completed') {
 				delete data.completionDate;
 			} else {
@@ -125,14 +126,14 @@ const EditTask = ({ data: form, setLoading }) => {
 				const message = response?.error?.message || response?.error?.data?.error?.message;
 				showAlert(message);
 			} else {
-				router.push('/home'); // back to home page
 				showAlert('Successfully saved.');
+				router.push('/home', undefined, { shallow: true }); // back to home page
+				// setLoading(false);
 			}
-			setLoading(false);
 		} catch (error) {
 			console.log({ error });
 			showAlert('Something went wrong! Please try again later.', 'error');
-			setLoading(false);
+			// setLoading(false);
 		}
 	};
 
@@ -199,7 +200,7 @@ const EditTask = ({ data: form, setLoading }) => {
 													<MenuItem
 														key={value}
 														value={value}
-														disabled={value === 'Completed' && subtasks?.length ? !subTaskAreDone : false}>
+														disabled={value === 'Completed' ? (subtasks?.length > 0 ? !subTaskAreDone : false) : false}>
 														{label}
 													</MenuItem>
 												))}

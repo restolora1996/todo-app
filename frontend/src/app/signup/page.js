@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import debounce from 'lodash.debounce';
 
@@ -13,9 +13,11 @@ import { signup, validateUsername } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useAlert } from '@/context/AlertContext';
 import { MEDIUM, STRONG, WEAK } from '@/utils/constants';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { valueContainsData } from '@/utils/helpers';
 
 const Signup = () => {
-	const router = useRouter();
+	// const router = useRouter();
 	const [passwordStrength, setPasswordStrength] = useState(0);
 	const [success, setSuccess] = useState(false);
 	const [isUsernameExist, setisUsernameExist] = useState('');
@@ -26,9 +28,9 @@ const Signup = () => {
 		username: yup
 			.string()
 			.min(3, 'Username must be 3 characters long')
+			.matches(/^[a-zA-Z0-9\s!#()_'-]+$/, 'Invalid symbol, allowed symbols are letters, numbers, spaces, !#()_-')
 			.required('Username is required')
 			.test('username-exist', 'Username is already exist', value => {
-				console.log(value, !isUsernameExist, { success });
 				return success ? true : !isUsernameExist || true;
 			}),
 		password: yup
@@ -36,8 +38,10 @@ const Signup = () => {
 			.min(8, 'Password must be at least 8 characters long')
 			.matches(/[\d!@#$%^&*(),.?":{}|<>]/, 'Password must contain a number or at least one special character')
 			.required('Password is required')
-			.test('no-username', 'Password should not cannot contain your username or email address', value => {
-				return !value || !username || !value.includes(username);
+			.test('no-username', 'Password should not cannot contain your username', value => {
+				if (!value || !username) return true;
+				// Check if password contains 3 consecutive characters from username
+				return !valueContainsData(username, value);
 			})
 	});
 
@@ -77,7 +81,10 @@ const Signup = () => {
 				throw new Error(response?.data?.error?.message);
 			} else {
 				setSuccess(true);
-				router.push('/login');
+				// showAlert('Signup success, redirecting you to sign in page.');
+				// setTimeout(() => {
+				// 	router.push('/login');
+				// }, 1000);
 			}
 		} catch (error) {
 			console.log({ error });
@@ -86,7 +93,8 @@ const Signup = () => {
 	};
 
 	// Check password strength rules
-	const pwContainsUsername = password && username ? !password.includes(username) : false;
+	const pwContainsUsername = password && username ? !valueContainsData(username, password) : false;
+
 	const pwMinLength = password.length >= 8;
 	const pwHasNumberOrSymbol = /[\d!@#$%^&*(),.?":{}|<>]/.test(password);
 
@@ -99,7 +107,6 @@ const Signup = () => {
 						alert(response?.error?.message || response?.data?.error?.message);
 					} else {
 						// Use functional update to ensure state is updated correctly
-						console.log(response.data);
 						setisUsernameExist(response?.data?.exist);
 					}
 				} catch (error) {
@@ -116,6 +123,12 @@ const Signup = () => {
 			usernameExist(username);
 		}
 	}, [password, username, success, isUsernameExist, usernameExist]);
+
+	const [showPassword, setShowPassword] = useState(false);
+
+	const handleTogglePassword = () => {
+		setShowPassword(prev => !prev);
+	};
 
 	return (
 		<LoginLayout>
@@ -138,20 +151,21 @@ const Signup = () => {
 				<TextField
 					fullWidth
 					label="Password"
-					type="password"
 					variant="outlined"
 					margin="normal"
 					{...register('password')}
 					error={!!errors?.password}
-					helperText={
-						password && (
-							<>
-								{passwordStrength}
-								<br />
-								{errors?.password?.message}
-							</>
+					helperText={password && <>{passwordStrength}</>}
+					type={showPassword ? 'text' : 'password'}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<IconButton onClick={handleTogglePassword} edge="end">
+									{showPassword ? <VisibilityOff /> : <Visibility />}
+								</IconButton>
+							</InputAdornment>
 						)
-					}
+					}}
 				/>
 
 				{/* Password Validation Rules */}

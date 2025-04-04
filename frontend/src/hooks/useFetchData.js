@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/UserContext';
 import { getTask, getTaskById } from '@/utils/api';
-import { useRouter } from 'next/navigation';
 
 const useFetchData = (id = null) => {
 	const {
@@ -14,6 +13,7 @@ const useFetchData = (id = null) => {
 	const [error, setError] = useState(null);
 
 	const fetchData = useCallback(async () => {
+		setLoading(true);
 		try {
 			const response = await getTask(token);
 			setData(response);
@@ -25,6 +25,7 @@ const useFetchData = (id = null) => {
 	}, [token]);
 
 	const fetchById = useCallback(async () => {
+		setLoading(true);
 		try {
 			const response = await getTaskById(id, token);
 

@@ -169,7 +169,7 @@ router.put('/update/:entity/:id', verifyToken, upload.any(), async (req, res) =>
 				await db['attachments'].destroy({ where: { id: deleteAttachemnts.map(item => item.id) } });
 				// Remove uploaded file
 				deleteAttachemnts.forEach(file => {
-					fs.unlink(path.join(__dirname, '../uploads', file?.fileName), err => {
+					fs.unlink(path.join(__dirname, '../uploads', file?.fileName.replace('/uploads/', '')), err => {
 						if (err) console.error('Error deleting file:', err);
 						console.log(`file ${file.fileName} is successfully deleted.`);
 					});
@@ -242,11 +242,6 @@ router.put('/delete/:entity', verifyToken, async (req, res) => {
 
 		await update({ entity, data: { deleted: true }, where: { id } });
 		res.send({ message: 'successfully deleted.', deletedIds: id });
-
-		// const sql = `UPDATE users SET delete=?  WHERE id = ?`;
-		// const response = await db.promise().query(sql, [true, id]);
-		// console.log(response);
-		// res.send(response);
 	} catch (error) {
 		console.log('delete:', error);
 		res.status(500).send({ error: { message: error?.message } });
@@ -277,7 +272,7 @@ router.post('/checkUsername', async (req, res) => {
 		// return true if username is exist else false if not
 		res.status(200).send({ exist: !!data.length });
 	} catch (error) {
-		console.log(error);
+		console.log({ error });
 		res.status(500).send({ error: { message: error?.message } });
 	}
 });

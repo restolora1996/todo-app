@@ -3,25 +3,27 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { logout } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { Typography } from '@mui/material';
 import { customStyle } from '@/utils/styles';
 import { useAlert } from '@/context/AlertContext';
+import { useAuth } from '@/context/UserContext';
 
 export default function SignOutModal({ modal, setModal }) {
 	const router = useRouter();
 	const { showAlert } = useAlert();
+	const { signOut } = useAuth();
 
 	const onSignOut = async () => {
 		try {
 			const response = await logout();
 			if (response?.logout) {
 				showAlert('Signout success. redirecting to login page.');
-				router.push('/login');
-				sessionStorage.clear();
+				signOut();
+				handleClose();
+				router.replace('/login');
 			}
 		} catch (error) {
 			console.log(error);

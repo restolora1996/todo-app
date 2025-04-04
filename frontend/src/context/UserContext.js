@@ -28,6 +28,10 @@ export const UserProvider = ({ children }) => {
 		setState(prevState => ({ ...prevState, user: null, token: null }));
 	};
 
+	const setLoading = value => {
+		setState(prevState => ({ ...prevState, loading: value }));
+	};
+
 	// Fetch token from API route
 	const fetchToken = useCallback(async () => {
 		try {
@@ -36,6 +40,7 @@ export const UserProvider = ({ children }) => {
 			const data = await response.json();
 
 			setState(prevState => ({ ...prevState, token: data?.token }));
+			return data.token;
 		} catch (error) {
 			setState(prevState => ({ ...prevState, token: null, loading: false }));
 		}
@@ -51,7 +56,6 @@ export const UserProvider = ({ children }) => {
 				setState(prevState => ({ ...prevState, user: response.user, token, loading: false }));
 			}
 		} catch (error) {
-			console.log('verify', error);
 			setState(prevState => ({ ...prevState, user: null, loading: false }));
 
 			if (error?.response.data?.error?.expired) {
@@ -69,12 +73,16 @@ export const UserProvider = ({ children }) => {
 	useEffect(() => {
 		const token = state.token;
 
-		if (token) verify(token);
-	}, [state.token, verify]);
+		if (token) {
+			verify(token);
+		}
+	}, [state.token, verify, fetchToken]);
 
-	return (
-		<UserContext.Provider value={{ state, setState, signIn, signOut, setFormData, resetFormData, verify }}>
-			{state.loading ? <Loader /> : children}
+	return state.loading ? (
+		<Loader />
+	) : (
+		<UserContext.Provider value={{ state, setState, setLoading, signIn, signOut, setFormData, resetFormData, verify }}>
+			{children}
 		</UserContext.Provider>
 	);
 };

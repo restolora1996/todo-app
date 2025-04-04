@@ -43,12 +43,3 @@ app.listen(port, err => {
 	}
 	console.log(`Server running on http://localhost:${port}`);
 });
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-	console.log('Shutting down server...');
-	server.close(() => {
-		console.log('Server closed.');
-		process.exit(0);
-	});
-});

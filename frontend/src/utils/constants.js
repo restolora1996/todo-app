@@ -1,9 +1,5 @@
 export const priorities = [
 	{
-		value: 'All',
-		label: 'All'
-	},
-	{
 		value: 'Low',
 		label: 'Low'
 	},
@@ -21,10 +17,6 @@ export const validImageType = ['png', 'jpeg', 'jpg', 'image/png', 'image/jpeg', 
 export const tenMB = 10 * 1024 * 1024;
 export const statusList = [
 	{
-		value: 'All',
-		label: 'All'
-	},
-	{
 		value: 'Not started',
 		label: 'Not started'
 	},
@@ -40,6 +32,11 @@ export const statusList = [
 		value: 'Cancelled',
 		label: 'Cancelled'
 	}
+];
+
+export const subtaskList = [
+	{ value: 'Not done', label: 'Not done' },
+	{ value: 'Done', label: 'Done' }
 ];
 
 export const STRONG = 'Password strength: Strong';

@@ -36,7 +36,7 @@ const getData = async ({ entity = null, id = null, where = {}, all = true, ...re
 			...rest
 		});
 	} catch (error) {
-		console.log(error);
+		console.log('getData', { error });
 		throw error;
 	}
 };

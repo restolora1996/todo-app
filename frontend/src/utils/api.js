@@ -1,7 +1,5 @@
 import axios from 'axios';
-const api = axios.create({
-	baseURL: process.env.API || 'http://localhost:4000/api'
-});
+const api = axios.create({ baseURL: process.env.API });
 
 // Login Function
 export const login = async data => {
@@ -69,14 +67,13 @@ export const validateUsername = async payload => {
 };
 
 export const formData = payload => {
-	console.log('formData payload', payload);
 	const setFormData = new FormData();
 	Object.keys(payload).map(key => {
 		if (Array.isArray(payload[key])) {
 			// Check if it's an array of files (attachments)
 			if (payload[key].some(item => item instanceof File)) {
 				// Append files one by one (keep them as actual files)
-				console.log('key with file', key, payload[key]);
+
 				payload[key].forEach(item => {
 					if (item instanceof File) {
 						setFormData.append(`${key}[]`, item);
@@ -85,8 +82,6 @@ export const formData = payload => {
 					}
 				});
 			} else {
-				console.log('key without file', key, payload[key]);
-
 				// Otherwise, stringify non-file arrays (subtasks, etc.)
 				setFormData.append(key, JSON.stringify(payload[key]));
 			}
@@ -147,7 +142,7 @@ export const getTaskById = async (id, token) => {
 export const updateTask = async (payload, token) => {
 	try {
 		const data = formData(payload);
-		console.log(data);
+
 		const response = await api.put(`/update/todos/${payload.id}`, data, {
 			headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` },
 			withCredentials: true

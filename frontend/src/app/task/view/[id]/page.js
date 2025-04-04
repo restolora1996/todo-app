@@ -13,7 +13,7 @@ const View = () => {
 	const onChangePage = pageName => setPage(pageName);
 	const { data, loading } = useFetchData(id);
 
-	if (!data && loading) {
+	if (!data) {
 		notFound(); // redirects to 404 page if no data found
 	}
 

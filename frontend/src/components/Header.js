@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { toggleSidebar } from '../utils';
 import { customStyle } from '@/utils/styles';
-import { Paper, Button, IconButton } from '@mui/material';
+import { Paper, IconButton } from '@mui/material';
 
 export default function Header() {
 	return (

@@ -28,10 +28,13 @@ import { createTask } from '@/utils/api';
 import { useAlert } from '@/context/AlertContext';
 import SubTaskForm from './SubTaskForm';
 import { priorities, statusList, tenMB, validImageType } from '@/utils/constants';
+import DeleteSubTaskModal from './DeleteSubTaskModal';
+import { styles } from '@/utils';
 
 const NewTask = ({ onChangePage }) => {
 	const {
-		state: { user, token }
+		state: { user, token },
+		setLoading
 	} = useAuth();
 	const { showAlert } = useAlert();
 
@@ -78,7 +81,7 @@ const NewTask = ({ onChangePage }) => {
 		defaultValues: {
 			status: 'Not started',
 			priority: 'Low',
-			title: '',
+			title: 'Task 01',
 			dateCreated: today,
 			description: '',
 			attachments: [],
@@ -89,8 +92,8 @@ const NewTask = ({ onChangePage }) => {
 	const subtasks = watch('subtasks');
 
 	const onSubmit = async data => {
+		setLoading(true);
 		try {
-			console.log({ ...data, user_id: user?.id }, token);
 			const response = await createTask({ ...data, user_id: user?.id }, token);
 
 			if (response?.error || response?.data?.error) {
@@ -105,16 +108,33 @@ const NewTask = ({ onChangePage }) => {
 		} catch (error) {
 			console.log({ error });
 			showAlert('Something went wrong! Please try again later.');
+		} finally {
+			setLoading(false);
 		}
 	};
 
-	const onDeleteSubTask = useCallback(
-		data => {
-			const filterSubTask = subtasks.filter((_, index) => index !== data);
-			setValue('subtasks', filterSubTask);
-		},
-		[setValue, subtasks]
-	);
+	const [modal, setModal] = useState(false);
+	const [subtaskId, setSubtaskId] = useState(null);
+
+	//open delete modal
+	const openModal = id => {
+		setModal(true);
+		setSubtaskId(id);
+	};
+
+	//close modal
+	const onClose = () => {
+		setModal(false);
+		setSubtaskId(null);
+	};
+
+	const onDeleteSubTask = useCallback(() => {
+		const filterSubTask = subtasks.filter((_, index) => index !== subtaskId?.index);
+		setValue('subtasks', filterSubTask);
+		showAlert('Successfully deleted.');
+
+		onClose();
+	}, [setValue, showAlert, subtasks, subtaskId]);
 
 	return (
 		<>
@@ -152,11 +172,13 @@ const NewTask = ({ onChangePage }) => {
 										defaultValue="Not started"
 										error={!!errors?.status}
 										helperText={errors?.status?.message}>
-										{statusList.map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))}
+										{statusList.map(({ value, label }) => {
+											return (
+												<MenuItem key={value} value={value} disabled={value === 'Completed' ? true : false}>
+													{label}
+												</MenuItem>
+											);
+										})}
 									</TextField>
 								</Grid>
 								<Grid size={{ xs: 12, sm: 12, md: 12 }}>
@@ -232,6 +254,7 @@ const NewTask = ({ onChangePage }) => {
 							setValue={setValue}
 							errors={errors}
 							onDeleteSubTask={onDeleteSubTask}
+							openModal={openModal}
 						/>
 					</Container>
 				</Box>
@@ -255,6 +278,31 @@ const NewTask = ({ onChangePage }) => {
 					</Button>
 				</Box>
 			</form>
+			<DeleteSubTaskModal
+				content={
+					<>
+						<Typography
+							sx={{
+								color: styles.primary,
+								fontSize: '16px'
+							}}>
+							Delete this Subtask?
+						</Typography>
+						<Typography
+							sx={{
+								color: styles.primary,
+								textDecoration: 'underline',
+								fontWeight: 'bold',
+								fontSize: '20px'
+							}}>
+							{subtaskId?.title || ''}
+						</Typography>
+					</>
+				}
+				modal={modal}
+				onClose={onClose}
+				onSubmit={onDeleteSubTask}
+			/>
 		</>
 	);
 };

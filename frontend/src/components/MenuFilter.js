@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { FilterAlt as FilterIcon, ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
-import { Menu, MenuItem, Button, ListItemIcon, Divider } from '@mui/material';
+import { FilterAlt as FilterIcon } from '@mui/icons-material';
+import { Menu, MenuItem, Button } from '@mui/material';
 import { styles } from '@/utils';
 
 export default function MenuFilter({ handleSetFilter }) {
@@ -23,7 +23,9 @@ export default function MenuFilter({ handleSetFilter }) {
 		({ field, value }) => {
 			setAnchorEl(null);
 			setSubmenuAnchorEl({});
-			handleSetFilter({ field, value });
+			if (field) {
+				handleSetFilter({ field, value });
+			}
 		},
 		[handleSetFilter]
 	);
@@ -63,6 +65,10 @@ export default function MenuFilter({ handleSetFilter }) {
 								sx={{ ml: 1, overflow: 'hidden' }}
 								anchorEl={submenuAnchorEl[index]}
 								open={Boolean(submenuAnchorEl[index])}
+								onMouseLeave={() => {
+									handleSubmenuClose(index);
+									handleMenuClose();
+								}}
 								onClose={() => handleSubmenuClose(index)}
 								anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
 								transformOrigin={{ vertical: 'top', horizontal: 'left' }}>

@@ -32,7 +32,6 @@ const Attachment = ({ attachments, setValue, error, helperText }) => {
 
 	const onDrop = useCallback(
 		acceptedFiles => {
-			console.log({ acceptedFiles });
 			// Add preview URL for images
 			const newFiles = acceptedFiles.map(file =>
 				Object.assign(file, {

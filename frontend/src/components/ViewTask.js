@@ -55,7 +55,7 @@ const ViewTask = ({ data }) => {
 	return (
 		<>
 			{data && (
-				<Box sx={customStyle.contentBody} style={{ maxHeight: '100vh' }}>
+				<Box sx={customStyle.contentBody} style={{ maxHeight: '100vh', overflow: 'auto' }}>
 					<Box style={customStyle.viewTaskContent}>
 						<Box className="mt-2">
 							<Grid container rowSpacing={2} columnSpacing={1} className="mb-6">
@@ -142,7 +142,9 @@ const ViewTask = ({ data }) => {
 															href={`${API_URL}${file?.fileName}`}
 															target="_blank"
 															rel="noopener noreferrer">
-															<Typography sx={{ textDecoration: 'underline' }}>{file?.fileName}</Typography>
+															<Typography sx={{ textDecoration: 'underline' }}>
+																{file?.fileName.replace('/uploads/', '')}
+															</Typography>
 															<Typography sx={{ color: styles.secondary }}>{file?.fileSize}</Typography>
 														</Link>
 													</Box>
@@ -153,10 +155,10 @@ const ViewTask = ({ data }) => {
 							</Grid>
 						</Box>
 						<Divider />
-						<Box className="mt-6 Subtasks w-[100%]">
+						<Box className="mt-6 Subtasks w-[100%] h-[50%]">
 							<Grid rowSpacing={2} columnSpacing={1}>
 								<Grid size={{ xs: 12, sm: 12, md: 12 }}>
-									<Box className="flex justify-start gap-6 mb-5">
+									<Box className="flex justify-start mb-5">
 										<Typography sx={{ color: styles.primary, fontSize: '18px', fontWeight: 'bold' }}>
 											Subtask
 										</Typography>
@@ -165,11 +167,11 @@ const ViewTask = ({ data }) => {
 								<Grid size={{ xs: 12, sm: 12, md: 12 }}>
 									{data?.subtasks?.length > 0 ? (
 										data?.subtasks.map(subtask => (
-											<Box className="flex gap-12 mb-1 subtask-items" key={subtask.id}>
+											<Box className="flex mb-1 subtask-items" key={subtask.id}>
 												<Typography sx={{ color: styles.primary, fontSize: '16px', width: '400px' }}>
 													{subtask.title}
 												</Typography>
-												<Box className="flex items-center gap-2" sx={{ color: styles.secondary }}>
+												<Box className="flex items-center gap-2 " sx={{ color: styles.secondary }}>
 													<Image
 														src={`/myassets/Icons/${subtask.status}.svg`}
 														width={10}

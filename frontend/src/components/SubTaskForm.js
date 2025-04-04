@@ -3,6 +3,7 @@ import { Add as AddIcon, DeleteOutline } from '@mui/icons-material';
 import { Box, Button, FormControl, IconButton, MenuItem, TextField, Tooltip, Typography } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { useAlert } from '@/context/AlertContext';
+import { subtaskList } from '@/utils/constants';
 
 const SubTaskForm = ({ control, subtasks, setValue, errors, status, openModal }) => {
 	const { showAlert } = useAlert();
@@ -97,9 +98,13 @@ const SubTaskForm = ({ control, subtasks, setValue, errors, status, openModal })
 										select
 										onChange={e => onChangeStatus(e.target.value, index)}
 										id={`status-${index}`}>
-										<MenuItem value="Not done">Not done</MenuItem>
-										<MenuItem value="In progress">In progress</MenuItem>
-										<MenuItem value="Done">Done</MenuItem>
+										{subtaskList.length > 0
+											? subtaskList.map(({ value, label }) => (
+													<MenuItem value={value} key={value}>
+														{label}
+													</MenuItem>
+												))
+											: null}
 									</TextField>
 								</FormControl>
 							</div>

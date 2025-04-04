@@ -3,7 +3,6 @@ import React from 'react';
 import Image from 'next/image';
 
 import { Box, Container } from '@mui/material';
-// import SocialMedias from '@/components/SocialMedias';
 
 const LoginLayout = ({ children }) => {
 	return (
