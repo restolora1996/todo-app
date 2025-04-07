@@ -1,22 +1,7 @@
-import {
-	Box,
-	Button,
-	Container,
-	Divider,
-	Grid2 as Grid,
-	IconButton,
-	InputLabel,
-	MenuItem,
-	Select,
-	Snackbar,
-	TextField,
-	Tooltip,
-	Typography
-} from '@mui/material';
+import { Box, Button, Container, Divider, Grid2 as Grid, MenuItem, TextField, Typography } from '@mui/material';
 import * as yup from 'yup';
-import AddIcon from '@mui/icons-material/Add';
-import React, { useCallback, useEffect, useState } from 'react';
-import { DeleteOutline } from '@mui/icons-material';
+
+import React, { useCallback, useState } from 'react';
 import { customStyle } from '@/utils/styles';
 import Attachment from './Attachment';
 import { useForm } from 'react-hook-form';
@@ -128,13 +113,15 @@ const NewTask = ({ onChangePage }) => {
 		setSubtaskId(null);
 	};
 
-	const onDeleteSubTask = useCallback(() => {
-		const filterSubTask = subtasks.filter((_, index) => index !== subtaskId?.index);
-		setValue('subtasks', filterSubTask);
-		showAlert('Successfully deleted.');
-
-		onClose();
-	}, [setValue, showAlert, subtasks, subtaskId]);
+	const onDeleteSubTask = useCallback(
+		e => {
+			e.preventDefault();
+			const filterSubTask = subtasks.filter((_, index) => index !== subtaskId?.index);
+			setValue('subtasks', filterSubTask);
+			onClose();
+		},
+		[setValue, subtasks, subtaskId]
+	);
 
 	return (
 		<>

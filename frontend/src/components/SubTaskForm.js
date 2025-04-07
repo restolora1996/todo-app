@@ -114,7 +114,15 @@ const SubTaskForm = ({ control, subtasks, setValue, errors, status, openModal })
 										title="Delete"
 										id={`delete-${index}`}
 										onClick={() => openModal({ index, title: subtask?.title })}>
-										<IconButton type="button" variant="outlined" color="neutral" size="small">
+										<IconButton
+											variant="outlined"
+											color="neutral"
+											size="small"
+											sx={{
+												'&:hover': {
+													background: '#fff'
+												}
+											}}>
 											<DeleteOutline />
 										</IconButton>
 									</Tooltip>

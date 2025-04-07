@@ -37,7 +37,6 @@ const EditTask = ({ data: form, setLoading }) => {
 			.string()
 			.required('Must not be empty.')
 			.test('later-dateCreated', 'Must be later than Date Created', value => {
-				console.log(value);
 				return moment(form?.dateCreated).format('YYYY-MM-DD') < moment(value).format('YYYY-MM-DD');
 			}),
 		status: yup.string().optional(),
@@ -114,7 +113,6 @@ const EditTask = ({ data: form, setLoading }) => {
 
 	const onSubmit = async data => {
 		try {
-			// setLoading(true);
 			if (data.status !== 'Completed') {
 				delete data.completionDate;
 			} else {
@@ -148,13 +146,16 @@ const EditTask = ({ data: form, setLoading }) => {
 		setSubtaskId(null);
 	};
 
-	const onDeleteSubTask = useCallback(() => {
-		const filterSubTask = subtasks.filter((_, index) => index !== subtaskId?.index);
-		setValue('subtasks', filterSubTask);
-		showAlert('Successfully deleted.');
+	const onDeleteSubTask = useCallback(
+		e => {
+			e.preventDefault();
+			const filterSubTask = subtasks.filter((_, index) => index !== subtaskId?.index);
+			setValue('subtasks', filterSubTask);
 
-		onClose();
-	}, [setValue, showAlert, subtasks, subtaskId]);
+			onClose();
+		},
+		[setValue, subtasks, subtaskId]
+	);
 
 	return (
 		<>
