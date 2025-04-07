@@ -9,13 +9,15 @@ import { useRouter } from 'next/navigation';
 import LoginLayout from '@/components/LoginLayout';
 import { useAuth } from '@/context/UserContext';
 import { useAlert } from '@/context/AlertContext';
+import { LOGIN } from '@/states/actions/userActions';
 
 const Login = () => {
 	const router = useRouter();
 
 	const {
 		state: { token },
-		signIn
+		signIn,
+		dispatch
 	} = useAuth();
 
 	const { showAlert } = useAlert();
@@ -24,7 +26,9 @@ const Login = () => {
 
 	const onSubmit = async submittedData => {
 		try {
-			const response = await login(submittedData);
+			// const response = await signIn(submittedData);
+			const response = await LOGIN(submittedData, dispatch);
+			// const response = await login(submittedData);
 			if (response?.error || response?.data?.error) {
 				const message = response?.error?.message || response?.data?.error?.message;
 				showAlert(message, 'error');
@@ -32,11 +36,13 @@ const Login = () => {
 			} else {
 				signIn(response);
 				showAlert('Login success.');
-				router.push('/home');
+				// router.push('/home');
 			}
 		} catch (error) {
-			console.log(error);
-			showAlert('Something went wrong! Please try again later.', 'error');
+			console.log('login error', { error });
+			showAlert(error.message, 'error');
+
+			// showAlert('Something went wrong! Please try again later.', 'error');
 		}
 	};
 

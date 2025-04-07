@@ -7,7 +7,7 @@ export const login = async data => {
 		const response = await api.post('/auth/login', data, { withCredentials: true });
 		return response?.data;
 	} catch (error) {
-		console.error('Login failed', error.response?.error);
+		// console.error('Login failed', error);
 		throw error;
 	}
 };
@@ -19,6 +19,16 @@ export const getUser = async () => {
 		return response?.data;
 	} catch (error) {
 		console.log('getUser', error);
+		throw error;
+	}
+};
+
+export const getToken = async () => {
+	try {
+		const response = await axios.get('/api/auth/getToken', { withCredentials: true });
+		return response?.data;
+	} catch (error) {
+		console.log('getToken', error);
 		throw error;
 	}
 };

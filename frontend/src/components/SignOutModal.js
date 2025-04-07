@@ -10,18 +10,21 @@ import { Typography } from '@mui/material';
 import { customStyle } from '@/utils/styles';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/UserContext';
+import { LOGOUT } from '@/states/actions/userActions';
 
 export default function SignOutModal({ modal, setModal }) {
 	const router = useRouter();
 	const { showAlert } = useAlert();
-	const { signOut } = useAuth();
+	const { signOut, dispatch } = useAuth();
 
 	const onSignOut = async () => {
 		try {
-			const response = await logout();
+			// const response = await logout();
+			const response = await LOGOUT(dispatch);
+			console.log('signout', response);
 			if (response?.logout) {
 				showAlert('Signout success. redirecting to login page.');
-				signOut();
+				// signOut();
 				handleClose();
 				router.replace('/login');
 			}

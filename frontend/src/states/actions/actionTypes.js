@@ -1,0 +1,13 @@
+export const actions = {
+	USER: {
+		START: 'START',
+		SUCCESS: 'SUCCESS',
+		FAIL: 'FAIL',
+		LOGIN: 'LOGIN',
+		LOGOUT: 'LOGOUT',
+		REGISTER: 'REGISTER',
+		VERIFY: 'VERIFY',
+		SETFORM: 'SETFORM',
+		TOGGLE: 'TOGGLE'
+	}
+};

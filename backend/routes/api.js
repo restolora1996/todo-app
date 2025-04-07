@@ -285,7 +285,7 @@ router.post('/auth/register', async (req, res) => {
 		const isExist = await getData({ entity: 'users', where: { username } });
 		// throw error if username is already exist
 		if (isExist.length) {
-			return res.status(201).send({ error: { message: 'Username is already exist.' } });
+			return res.status(401).send({ error: { message: 'Username is already exist.' } });
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10);
@@ -312,20 +312,20 @@ router.post('/auth/login', async (req, res) => {
 		const user = await getData({ entity: 'users', where: { username }, all: false });
 		// throw error if username is not exist
 		if (!user) {
-			return res.status(201).send({ error: { message: 'Incorrect Username and Password.' } });
+			return res.status(401).send({ error: { message: 'Incorrect Username and Password.' } });
 		}
 
 		const correctPassword = await bcrypt.compare(password, user?.password);
 
-		if (!correctPassword) return res.status(201).send({ error: { message: 'Incorrect Username and Password.' } });
+		if (!correctPassword) return res.status(401).send({ error: { message: 'Incorrect Username and Password.' } });
 
 		const token = await jwt.sign({ id: user.id, username: username }, process.env.JWT_SECRET, {
 			expiresIn: process.env.JWT_EXPIRES_IN
 		});
 
 		setToken(res, token);
-		// res.send({ message: 'Login success.', user: { id: user.id, username } });
-		res.send({ message: 'Login success.' });
+		res.send({ message: 'Login success.', user: { id: user.id, username } });
+		// res.send({ message: 'Login success.' });
 	} catch (error) {
 		console.log('login error:', error);
 		res.status(500).send({ error: { message: error?.message } });
