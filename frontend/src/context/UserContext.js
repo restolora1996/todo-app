@@ -20,8 +20,8 @@ export const UserProvider = ({ children }) => {
 	};
 
 	const signIn = async data => {
-		setState(prevState => ({ ...prevState, user: data?.user }));
-		await fetchToken();
+		setState(prevState => ({ ...prevState, user: data?.user || null }));
+		fetchToken();
 	};
 
 	const signOut = () => {
@@ -44,7 +44,7 @@ export const UserProvider = ({ children }) => {
 		} catch (error) {
 			setState(prevState => ({ ...prevState, token: null, loading: false }));
 		}
-	}, []);
+	}, [setState]);
 
 	const verify = useCallback(async token => {
 		try {
@@ -58,17 +58,22 @@ export const UserProvider = ({ children }) => {
 		} catch (error) {
 			setState(prevState => ({ ...prevState, user: null, loading: false }));
 
-			if (error?.response.data?.error?.expired) {
+			if (error?.response?.data?.error?.expired) {
 				window.location = '/login';
 				alert('Your session has expired. Please sign in again.');
 			}
+
+			window.location = '/login';
+			alert('Something went wrong. Please sign in again.');
 			console.log('Token verification failed:', error.message);
 		}
 	}, []);
 
 	useEffect(() => {
-		fetchToken();
-	}, [fetchToken]);
+		const token = state.token;
+
+		if (!token) fetchToken();
+	}, [fetchToken, state.token]);
 
 	useEffect(() => {
 		const token = state.token;

@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, Button, Checkbox, Collapse, IconButton, TableSortLabel, Tooltip, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { ArrowDropDown, ArrowRight, DeleteOutline } from '@mui/icons-material';
+import { ArrowDropDown, ArrowRight, DeleteOutline, ListAlt } from '@mui/icons-material';
 import { customStyle } from '@/utils/styles';
 import { deleteTask } from '@/utils/api';
 import { useAuth } from '@/context/UserContext';
@@ -22,6 +22,7 @@ import Link from 'next/link';
 import moment from 'moment';
 import { styles } from '@/utils';
 import { visuallyHidden } from '@mui/utils';
+import Loader from './Loader';
 
 const headerColumns = [
 	{
@@ -46,7 +47,7 @@ const headerColumns = [
 	}
 ];
 
-export default function TableData({ data, setData, filter }) {
+export default function TableData({ data, setData, loading, filter }) {
 	const router = useRouter();
 	const {
 		state: { token },
@@ -332,9 +333,23 @@ export default function TableData({ data, setData, filter }) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{visibleRows.map(row => {
-							return <Row row={row} key={row.id} />;
-						})}
+						{visibleRows.length === 0 && loading ? (
+							<TableRow>
+								<TableCell colSpan={6} align="center">
+									<Loader height="30vh" />
+								</TableCell>
+							</TableRow>
+						) : visibleRows.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={6} align="center">
+									<Typography fontSize={12}>No data found.</Typography>
+								</TableCell>
+							</TableRow>
+						) : (
+							visibleRows.map(row => {
+								return <Row row={row} key={row.id} />;
+							})
+						)}
 					</TableBody>
 				</Table>
 			</TableContainer>

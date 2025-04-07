@@ -17,7 +17,7 @@ import { priorities, statusList, tenMB, validImageType } from '@/utils/constants
 import DeleteSubTaskModal from './DeleteSubTaskModal';
 import { styles } from '@/utils';
 
-const EditTask = ({ data: form, setLoading }) => {
+const EditTask = ({ data: form }) => {
 	const router = useRouter();
 	const {
 		state: { user, token }
@@ -126,12 +126,10 @@ const EditTask = ({ data: form, setLoading }) => {
 			} else {
 				showAlert('Successfully saved.');
 				router.push('/home', undefined, { shallow: true }); // back to home page
-				// setLoading(false);
 			}
 		} catch (error) {
 			console.log({ error });
 			showAlert('Something went wrong! Please try again later.', 'error');
-			// setLoading(false);
 		}
 	};
 

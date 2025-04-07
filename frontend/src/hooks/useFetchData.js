@@ -9,7 +9,7 @@ const useFetchData = (id = null) => {
 	} = useAuth();
 	const { showAlert } = useAlert();
 	const [data, setData] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
 	const fetchData = useCallback(async () => {

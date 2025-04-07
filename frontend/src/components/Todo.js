@@ -7,7 +7,6 @@ import MenuFilter from '@/components/MenuFilter';
 import { customStyle } from '@/utils/styles';
 import { styles } from '@/utils';
 import useFetchData from '@/hooks/useFetchData';
-import Loader from './Loader';
 
 const Todo = ({ onChangePage }) => {
 	const { data, setData, loading } = useFetchData();
@@ -24,7 +23,7 @@ const Todo = ({ onChangePage }) => {
 			return existing ? [...prev] : [...prev, { field, value }];
 		});
 	}, []);
-                                                                                                                                                                                                                                                                                                                                                         
+
 	return (
 		<Box>
 			<Box
@@ -71,7 +70,7 @@ const Todo = ({ onChangePage }) => {
 					New Task
 				</Button>
 			</Box>
-			{loading ? <Loader /> : <TableData data={data} setData={setData} filter={filter} />}
+			<TableData data={data} setData={setData} filter={filter} loading={loading} />
 		</Box>
 	);
 };
